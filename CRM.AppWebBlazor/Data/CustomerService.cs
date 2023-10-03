@@ -8,7 +8,7 @@ namespace CRM.AppWebBlazor.Data
 
         public CustomerService(IHttpClientFactory httpClientFactory)
         {
-            _httpClientCRM = httpClientFactory.CreateClient("CRMAPI");
+            _httpClientCRM = httpClientFactory.CreateClient("CRM");
         }
 
         public async Task<SearchResultCustomerDTO> Search(SearchQueryCustomerDTO searchQueryCustomerDTO)

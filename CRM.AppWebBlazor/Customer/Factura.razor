@@ -1,4 +1,4 @@
-﻿@page "/customer-list022"
+﻿@page "/customer-list"
 @using CRM.DTOs.CustomerDTOs;
 @using System.Text.Json;
 @using Microsoft.AspNetCore.Components;
@@ -7,12 +7,12 @@
 
 <h3>Buscar Cliente</h3>
 
- <EditForm Model="searchQuery" OnValidSubmit="SubmitSearch">
+<EditForm Model="searchQuery" OnValidSubmit="SubmitSearch">
     <div class="row">
         <div class="col-3">
             <div class="form-group">
                 <label form="Name">Nombre:</label>
-                <InputText class="form-control" @bind-Value="searchQuery.Name_Like"/>
+                <InputText class="form-control" @bind-Value="searchQuery.Name_Like" />
             </div>
         </div>
 
@@ -25,8 +25,8 @@
         <div class="col-2">
             <div class="form-group">
                 <label form="Take">CantReg X Pagina</label>
-                <select class="form-control"@bind="searchQuery.Take">
-                    @for(var i=10; i<1000; i += 10)
+                <select class="form-control" @bind="searchQuery.Take">
+                    @for (var i = 10; i < 1000; i += 10)
                     {
                         <option value="@i">@i</option>
                     }
@@ -47,9 +47,9 @@
             <li class="page-item">
                 <NavLink class="page-link" @onclick="async () => await PaginationSearch(skipAnte)">Anterior</NavLink>
             </li>
-            @foreach(var item in paginations)
+            @foreach (var item in paginations)
             {
-                if(item.Skip != searchQuery.Skip)
+                if (item.Skip != searchQuery.Skip)
                 {
                     <li class="pege-item">
                         <NavLink class="page-link" @onclick="async ()=> await PaginationSearch(item.Skip)">@item.NumPage</NavLink>
@@ -63,7 +63,7 @@
 <div class="row-cols-6">
     <span>Total registros: @searchResult.CountRow</span>
 </div>
-@if(searchResult != null && searchResult.Data != null && searchResult.Data.Count > 0)
+@if (searchResult != null && searchResult.Data != null && searchResult.Data.Count > 0)
 {
     <table class="table">
         <thead>
@@ -75,11 +75,11 @@
             </tr>
         </thead>
         <tbody>
-            @foreach(var customer in searchResult.Data)
+            @foreach (var customer in searchResult.Data)
             {
                 <tr>
                     <td>@customer.Name</td>
-                     <td>@customer.LastName</td>
+                    <td>@customer.LastName</td>
                     <td>@customer.Address</td>
                     <td>
                         <button class="btn btn-dark" @onclick="() =>GoEdit(customer.Id)">Editar</button>
@@ -91,14 +91,14 @@
         </tbody>
     </table>
 }
-@code{
+@code {
     [Inject]
-    CustomerService customerService{ get; set; }
+    CustomerService customerService { get; set; }
     [Inject]
-    NavigationManager navigation{ get; set; }
+    NavigationManager navigation { get; set; }
 
     SearchResultCustomerDTO searchResult = new SearchResultCustomerDTO();
-    SearchQueryCustomerDTO searchQuery = new SearchQueryCustomerDTO{Take=10};
+    SearchQueryCustomerDTO searchQuery = new SearchQueryCustomerDTO { Take = 10 };
     List<Pagination> paginations = new List<Pagination>();
     int skipAnte = 0;
     int skipSi = 0;
@@ -118,7 +118,7 @@
     }
     private async Task SubmitSearch()
     {
-        searchQuery.SendRowCount =2;
+        searchQuery.SendRowCount = 2;
         searchQuery.Skip = 0;
 
         await Search();
@@ -162,25 +162,25 @@
         skipAnte = searchQuery.Skip > 0 ? searchQuery.Skip - searchQuery.Take : 0;
         int skipMax = 0;
 
-        for(var i = 0; i<totalPages; i++)
+        for (var i = 0; i < totalPages; i++)
         {
             var pagination = new Pagination()
-            {
-                Skip = i * searchQuery.Take,
-                NumPage = i + 1
-            };
+                {
+                    Skip = i * searchQuery.Take,
+                    NumPage = i + 1
+                };
             paginations.Add(pagination);
             skipMax = pagination.Skip;
         }
         skipSi = searchQuery.Skip + searchQuery.Take;
         skipSi = skipSi > skipMax ? skipSi - searchQuery.Take : skipSi;
     }
-  
-    
+
+
 
     class Pagination
     {
-    public int NumPage{ get; set; }
-    public int Skip { get; set; }
+        public int NumPage { get; set; }
+        public int Skip { get; set; }
     }
-} 
+}
